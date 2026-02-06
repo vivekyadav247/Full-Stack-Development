@@ -1,0 +1,439 @@
+body{
+  background-image: url("https://www.mintlify.com/hero/bg-light.svg");
+  background-position: center;  
+  background-size: cover;
+  background-repeat: no-repeat ;
+  height: 100vh;
+  margin : 0 ;
+  overflow-x: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+header{
+  width : 100% ;
+  padding : 16px 24px ;
+}
+#navbar{
+  display : flex ;
+  align-items: center ;
+  justify-content: space-between;
+  width : 70% ;
+  margin: auto;
+}
+
+.part-1{
+  display : flex ;
+  justify-content: space-between;
+  align-items: center ;
+  width : 70% ;
+}
+
+.logo{
+  width : 104px ;
+  height : 24px ;
+}
+
+.navigations{
+  display : flex ;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigations a{
+  text-decoration: none ;
+  color : black ;
+  font-size: 16px ;
+  gap : 24px ;
+  padding: 4px 12px;
+  color : #fff ;
+}
+
+.part-2{
+  display : flex ;
+  align-items: center ;
+  gap : 16px ;
+}
+
+.btn-1{
+  padding : 4.5px 12px ;
+  color : lab(100 0 0) ;
+  background-color: lab(100 0 0 / 0.05) ;
+  border-radius: 16px ;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn-2{
+  padding : 4.5px 12px ;
+  color : #000 ;
+  background-color: #fff;
+  border-radius: 16px ;
+  text-align: center ;
+  text-decoration: none;
+}
+
+.docs-link{
+  display : flex ;
+  text-decoration: none  ;
+  color : white ;
+  align-items: center;
+  justify-content: space-between;
+  margin : 24px auto ;
+  width : 20% ;
+  background-color: lab(2.42579 -0.155291 -0.470081 / 0.15);
+  border-radius: 80px ;
+  padding : 2px 8px;
+  font-size: 12px;
+  z-index: 1;
+  position: relative;
+}
+
+.new-btn{
+  background-color: rgb(24, 226, 153) ;
+  color : #fff;
+  border-radius: 60px;
+  padding: 2px 8px;
+}
+
+.next-icon{
+  width : 16px ;
+  height : 16px ;
+}
+
+.hero-content{
+  display : flex ;
+  flex-direction: column ;
+  align-items: center ;
+  justify-content: center ;
+  padding :  20px 0px 96px 0px;
+  text-align: center;
+  color : #fff ;
+}
+
+.hero-content-1{
+  font-size: 52px;
+  font-weight: 600 ;
+  width : 40% ;
+  margin : 0px ;
+}
+
+.hero-content-2{
+  font-size: 18px ;
+  font-weight: 400 ;
+  margin : 24px 0px 0px 0px ;
+  width : 30% ;
+}
+
+.hero-form{
+  display: flex ;
+  justify-content: space-between;
+  align-items: center ;
+  margin: 32px 0px 0px 0px;
+  width : 23% ;
+  gap : 8px ;
+  background-color: lab(100 0 0/ 0.15);
+  padding: 4px;
+  border-radius: 50px;
+}
+
+.email-input{
+  width : 60% ;
+  padding : 4.5px 12px ;
+  border : none ;
+  background-color: transparent ;
+  color : #fff ;
+  padding : 0px 12px ;
+  outline: none;
+}
+
+.email-btn{
+  padding: 4.5px 12px ;
+  font-size : 15px ;
+  background-color: lab(100 0 0 );
+  color : lab(2.42579 -0.155291 -0.470081 ) ;
+  border-radius: 60px ;
+  border : none ;
+}
+
+.hero-image{
+  width : 1080px ;
+  height : 656px ;
+  margin : auto ;
+  color : transparent ;
+  display : block ;
+}
+
+.trusted-by{
+  display : flex ;
+  align-items: center ;
+  justify-content: space-between;
+  width : 80% ;
+  margin : auto ;
+  padding : 96px 8px 144px 8px ;
+}
+
+.trusted-by img{
+  width : 80% ;
+  margin: auto;
+}
+
+.feature{
+  display : flex ;
+  flex-direction: column;
+  width : 60% ;
+  margin : auto ;
+  height : auto ;
+  padding-bottom: 96px ;
+}
+
+.highlight-title{
+  text-align: center ;
+}
+
+.highlight-title h2{
+  font-size: 32px ;
+  font-weight: 600 ;
+}
+
+.highlight-title p{
+  font-size: 18px ;
+  font-weight: 400 ;
+  margin : 16px 0px 0px 0px ;
+  width : 70% ;
+  margin : auto ;
+}
+
+.highlights{
+  display : flex ;
+  align-items: center ;
+  justify-content: space-between;
+  margin : 32px 0px 0px 0px ;
+}
+
+.highlight-1{
+  width : 48% ;
+  height : 520px ;
+  background-color: lab(100 0 0 / 0.15) ;
+  border-radius: 16px ;
+  border : 1px solid lab(0 0 0 / 0.15) ;
+  padding : 4px 8px ;
+}
+
+.work{
+  font-size: 16px ;
+  font-weight: 500 ;
+  color : rgb(24, 226, 153) ;
+}
+
+.titles{
+  font-size: 24px ;
+  font-weight: 600 ;
+  margin : 8px 0px 0px 0px ;
+}
+
+.highlight-1 img{
+  width : 100% ;
+  height : auto ;
+}
+
+.highlight-2{
+  width : 48% ;
+  height : 520px ;
+  background-color: lab(100 0 0 / 0.15) ;
+  border-radius: 16px ;
+  border : 1px solid lab(0 0 0 / 0.15) ;
+  padding : 4px 8px ;
+  margin-left : 24px ;
+}
+
+.highlight-2 img{
+  width : 100% ;
+  height : auto ;
+}
+
+.enterprise{
+  width : 100% ;
+  background-color: lab(2.42579 -0.165291 -0.470081 / 0.03);
+  padding : 96px 0px 96px 0px ;
+}
+
+.enterprise-content{
+  display : flex ;
+  flex-direction: column ;
+  width : 60% ;
+  margin : auto ;
+}
+
+.enterprise-info{
+  display : flex ;
+  justify-content: space-between;
+  padding-bottom: 48px ;
+}
+
+.ent-info-wrap{
+  display : flex ;
+  flex-direction: column ;
+  justify-content: space-between;
+  width : 60% ;
+  height: auto;
+  margin : 0px ;
+}
+
+.enterprise-title{
+  font-size: 40px ;
+  font-weight: 600 ;
+  margin: 0px;
+}
+
+.enterprise-caption{
+  font-size: 14px ;
+  font-weight: 400 ;
+  margin: 0px ;
+}
+
+.ent-use{
+  font-size: 16px ;
+  font-weight: 500 ;
+  color : rgb(24, 226, 153) ;
+  margin : 0px ;
+}
+
+.ent-expl-btn{
+  display: flex ;
+  align-items: flex-end ;
+  justify-content: center ;
+}
+
+.explore-btn{
+  text-decoration: none;
+  padding : 12px 16px ;
+  font-size: 18px ;  
+  background-color : lab(2.42579 -0.155291 -0.470081 ) ;
+  color: lab(100 0 0 );
+  border-radius: 60px ;
+  border : none ;
+}
+
+.footer{
+  width : 100% ;
+  background-color: lab(2.42579 -0.155291 -0.470081 / 0.02) ;
+  border-top: 1px solid lab(0 0 0 / 0.1) ;
+  padding : 96px 0px 48px 0px ;
+  margin-top: 96px ;
+}
+
+.footer-content{
+  width : 70% ;
+  margin : auto ;
+  display : flex ;
+  flex-direction: column ;
+  gap : 48px ;
+}
+
+.footer-top{
+  display : flex ;
+  justify-content: space-between ;
+  align-items: center ;
+  padding-bottom: 32px ;
+  border-bottom: 1px solid lab(0 0 0 / 0.1) ;
+}
+
+.footer-logo{
+  display : flex ;
+  align-items: center ;
+}
+
+.footer-logo-img{
+  width : 104px ;
+  height : 24px ;
+}
+
+.footer-socials{
+  display : flex ;
+  gap : 24px ;
+  align-items: center ;
+}
+
+.social-link{
+  display : flex ;
+  align-items: center ;
+  justify-content: center ;
+  width : 24px ;
+  height : 24px ;
+  color : #666 ;
+  text-decoration: none ;
+  transition: color 0.3s ease ;
+}
+
+.social-link:hover{
+  color : rgb(24, 226, 153) ;
+}
+
+.social-link svg{
+  width : 100% ;
+  height : 100% ;
+}
+
+.footer-links{
+  display : grid ;
+  grid-template-columns: repeat(5, 1fr) ;
+  gap : 32px ;
+}
+
+.footer-column{
+  display : flex ;
+  flex-direction: column ;
+  gap : 12px ;
+}
+
+.footer-title{
+  font-size: 14px ;
+  font-weight: 600 ;
+  color : #000 ;
+  text-transform: uppercase ;
+  letter-spacing: 0.5px ;
+  margin : 0px ;
+}
+
+.footer-list{
+  list-style: none ;
+  padding : 0px ;
+  margin : 0px ;
+  display : flex ;
+  flex-direction: column ;
+  gap : 8px ;
+}
+
+.footer-list li a{
+  font-size: 14px ;
+  font-weight: 400 ;
+  color : #333 ;
+  text-decoration: none ;
+  transition: color 0.2s ease ;
+}
+
+.footer-list li a:hover{
+  color : rgb(24, 226, 153) ;
+}
+
+.footer-bottom{
+  display : flex ;
+  justify-content: space-between ;
+  align-items: center ;
+  padding-top: 32px ;
+  border-top: 1px solid lab(0 0 0 / 0.1) ;
+}
+
+.footer-status{
+  font-size: 14px ;
+  font-weight: 500 ;
+  color : #000 ;
+  margin : 0px ;
+}
+
+.footer-copyright{
+  font-size: 12px ;
+  font-weight: 400 ;
+  color : #666 ;
+  margin : 0px ;
+}
