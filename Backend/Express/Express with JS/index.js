@@ -1,21 +1,32 @@
-const http = require("http");
+const express = require("express");
 
-const server = http.createServer((req, res) => {
-  if (req.method === "GET" && req.url === "/menu") {
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ items: ["thali", "biryani"] }));
-  } else if (req.method === "POST" && req.url === "/order") {
-    let data = "";
-    req.on("data", (chunk) => (data += chunk));
-    req.on("end", () => {
-      const order = JSON.parse(data);
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(
-        JSON.stringify({
-          status: "received",
-          order,
-        }),
-      );
-    });
-  }
+const app = express();
+
+app.use(express.json());
+
+app.get("/", (req, res) => res.send("Welcome to the Node.js server of Express!"));
+
+app.get("/menu", (req, res) =>
+  res.json({
+    items: ["thali", "biryani"],
+  }),
+);
+
+app.post("/order", myfun);
+
+app.use((req, res) => {
+  res.status(404).send("404 Not Found");
+});
+
+const myfun = (req, res) => {
+  let order = req.body;
+
+  res.status(200).json({
+    status: "received",
+    order: req.body,
+  });
+};
+
+app.listen(3000, () => {
+  console.log("Server is running on http://localhost:3000");
 });
