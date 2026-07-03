@@ -101,8 +101,73 @@ function block_1_basicServer(){
   })
 }
 
+function block_2_response(){
+  return new Promise((resolve) => {
+    const app = express() ;
+
+    // Get with text response
+    app.get('/text', (req, res) => {
+      res.send('Hello, this is a text response');
+    });
+
+    // Get with json response
+    app.get('/json', (req, res) => {
+      res.json({
+        message : 'Hello, this is a JSON response'
+      })
+    })
+
+    // Get with response status code
+    app.get('/status', (req, res) => {
+      res.status(404).json({
+        message : 'Resource not found'
+      })
+    });
+
+    // Health check endpoint (Response of Status 200)
+    app.get('/health', (req, res) => {
+      res.status(200).json({
+        status : 'OK'
+      })
+    });
+
+    // Response with redirect
+    app.get('/redirect', (req, res) => {
+      res.redirect(301, '/old-endpoint');
+    });
+
+    // Response of xml data
+    app.get('/xml', (req, res) => {
+      res.type('application/xml').send('<note><to>User</to><from>Server</from><message>Hello, this is an XML response</message></note>');
+    });
+
+    // Response with custom headers (Always use X- prefix for custom headers)
+    app.get('/custom-header', (req, res) => {
+      res.set('X-Custom-Header', 'CustomHeaderValue').json({
+        message : 'Response with custom header'
+      })
+      // Uses of custom headers: Cors, caching , tracing, authentication, rate limiting, etc.
+    });
+
+    // Response with no content (204)
+    app.get('/no-content', (req, res) => {
+      res.status(204).end();
+    });
+
+
+    const server = app.listen(3000, async () => {
+      const port = server.address().port;
+      const base = `http://localhost:${server.address().port}`;
+      console.log('Server is running on port', port);
+      resolve();
+    });
+
+  });
+}
+
 async function main(){
   await block_1_basicServer();
+  await block_2_response();
 
   process.exit(0);
 }
