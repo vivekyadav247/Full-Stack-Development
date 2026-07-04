@@ -23,3 +23,5 @@ class ApiResponses {
     })
   }
 }
+
+export default ApiResponses ;
