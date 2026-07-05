@@ -1,6 +1,11 @@
 import ApiError from "../../common/utils/api-error.js"
-import { generateResetToken } from "../../common/utils/jwt.utils.js";
+import { generateAccessToken, verifyAccessToken,generateRefreshToken,verifyRefreshToken,generateResetToken } from "../../common/utils/jwt.utils.js";
 import User from "./auth.model.js"
+import { isVerified } from "./auth.utils.js"
+import cookie from "cookie-parser"
+import crypto from "crypto"
+
+const hashedtoken = (token) => {crypto.createHash("sha256").update(token).digest("hex")};
 
 const register = async (req)=> {
     
@@ -26,5 +31,95 @@ const register = async (req)=> {
     return userObj
 }
 
+const login = async ({email, password}) => {
+    const user = await User.findOne({email}).select("+password") ;
+    if(!user) throw ApiError.notFound("User not found");
 
-export {register}
+    // I will check Password
+
+    if(!isVerified(user)) throw ApiError.unauthorized("User not verified");
+
+    const accessToken = generateAccessToken({id: user._id, role: user.role});
+    const refreshToken = generateRefreshToken({id: user._id, role: user.role});
+
+    user.refreshToken = hashedtoken(refreshToken);
+    await user.save(validateBeforeSave=false);
+
+    const userObj = user.toObject();
+    delete userObj.password;
+    delete userObj.refreshToken;
+    
+    cookie.sign(accessToken, {httpOnly: true, maxAge: 1000 * 60 * 60}) ;
+    return { accessToken, refreshToken, user: userObj };
+}
+
+
+const refresh = async (token) => {
+    if(!token) throw ApiError.unauthorized("Refresh token missing") ;
+
+    const decoded = verifyRefreshToken(token) ;
+
+    const user = await User.findById(decoded.id).select("+refreshToken") ;
+    if(!user) throw ApiError.notFound("User not found") ;
+
+    if(user.refreshToken !== hashedtoken(token)) throw ApiError.unauthorized("Refresh token mismatch") ;
+
+    const accessToken = generateAccessToken({id: user._id, role: user.role});
+    const refreshToken = generateRefreshToken({id: user._id, role: user.role});
+
+    user.refreshToken = hashedtoken(refreshToken);
+    await user.save(validateBeforeSave=false);
+
+    cookie.sign(accessToken, {httpOnly: true, maxAge: 1000 * 60 * 60}) ;
+    return {accessToken, refreshToken} ;
+}
+
+const logout = async (token) => {
+    if(!token) throw ApiError.unauthorized("Refresh token missing") ;
+
+    const decoded = verifyRefreshToken(token) ;
+    const user = await User.findById(decoded.id).select("+refreshToken") ;
+    if(!user) throw ApiError.notFound("User not found") ;
+
+    cookie.clear("accessToken") ;
+    user.refreshToken = undefined ;
+    await user.save(validateBeforeSave=false) ;
+}
+
+const verifyUser = async (token) => {
+    const hashToken = hashedtoken(token) ;
+    const user = await User.findOne({verificationToken: hashToken}) ;
+    if(!user) throw ApiError.badRequest("Invalid token") ;
+
+    user.isVerified = true ;
+    user.verificationToken = undefined ;
+    await user.save(validateBeforeSave=false) ;
+}
+
+const forgotPassword = async (email) => {
+    const user = await User.findOne({email}) ;
+    if(!user) throw ApiError.notFound("User not found") ;
+
+    const {rawToken, hashedToken} = generateResetToken() ;
+
+    user.resetPasswordToken = hashedToken ;
+    user.resetPasswordExpires = Date.now() + 1000 * 60 * 10 ; // 10 minutes
+    await user.save(validateBeforeSave=false) ;
+    // TODO: send an email to user with token: rawToken
+}
+
+const newPassword = async (token, password) => {
+    const hashedToken = hashedtoken(token) ;
+    const user = await User.findOne({resetPasswordToken: hashedToken, resetPasswordExpires: {$gt: Date.now()}}) ;
+    if(!user) throw ApiError.badRequest("Invalid or expired token") ;
+
+    user.password = password ;
+    user.resetPasswordToken = undefined ;
+    user.resetPasswordExpires = undefined ;
+    await user.save(validateBeforeSave=false) ;
+
+    return {message: "Password reset successful"} ;
+}
+
+
+export {register, login, refresh, logout, forgotPassword, newPassword, verifyUser} ;
