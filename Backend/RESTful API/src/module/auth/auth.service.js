@@ -36,6 +36,8 @@ const login = async ({email, password}) => {
     if(!user) throw ApiError.notFound("User not found");
 
     // I will check Password
+    const isMatch = await user.comparePassword(password) ;
+    if(!isMatch) throw ApiError.unauthorized("Invalid credentials");
 
     if(!isVerified(user)) throw ApiError.unauthorized("User not verified");
 
@@ -74,16 +76,8 @@ const refresh = async (token) => {
     return {accessToken, refreshToken} ;
 }
 
-const logout = async (token) => {
-    if(!token) throw ApiError.unauthorized("Refresh token missing") ;
-
-    const decoded = verifyRefreshToken(token) ;
-    const user = await User.findById(decoded.id).select("+refreshToken") ;
-    if(!user) throw ApiError.notFound("User not found") ;
-
-    cookie.clear("accessToken") ;
-    user.refreshToken = undefined ;
-    await user.save(validateBeforeSave=false) ;
+const logout = async (userid) => {
+    const user = await User.findById(userid, {refreshToken: null}) ;
 }
 
 const verifyUser = async (token) => {
@@ -121,5 +115,13 @@ const newPassword = async (token, password) => {
     return {message: "Password reset successful"} ;
 }
 
+const getMe = async (userId) => {
+    const user = await User.findById(userId) ;
+    if(!user) throw ApiError.notFound("User not found") ;
+    const userObj = user.toObject() ;
+    delete userObj.password ;
+    delete userObj.refreshToken ;
+    return userObj ;
+}
 
-export {register, login, refresh, logout, forgotPassword, newPassword, verifyUser} ;
+export {register, login, refresh, logout, forgotPassword, newPassword, verifyUser, getMe} ;
