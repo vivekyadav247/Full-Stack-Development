@@ -1,5 +1,5 @@
 import * as authService from "./auth.service.js"
-import ApiResponse from "../../common/utils/api-response.js"
+import ApiResponse from "../../common/utils/api-responses.js"
 
 const register = async (req, res) => {
     const user = await authService.register(req.body)
@@ -25,4 +25,9 @@ const getMe = async (req, res) => {
     ApiResponse.ok(res, "User fetched successfully", user) ;
 }
 
-export {register, login, logout, getMe}
+const verifyUser = async (req, res) => {
+    const user = await authService.verifyUser(req.params.token) ;
+    ApiResponse.ok(res, "User verified successfully", user) ;
+}
+
+export {register, login, logout, getMe, verifyUser}

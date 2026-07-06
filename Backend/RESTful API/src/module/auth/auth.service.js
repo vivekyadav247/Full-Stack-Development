@@ -1,7 +1,7 @@
 import ApiError from "../../common/utils/api-error.js"
 import { generateAccessToken, verifyAccessToken,generateRefreshToken,verifyRefreshToken,generateResetToken } from "../../common/utils/jwt.utils.js";
 import User from "./auth.model.js"
-import { isVerified } from "./auth.utils.js"
+
 import cookie from "cookie-parser"
 import crypto from "crypto"
 
@@ -22,7 +22,11 @@ const register = async (req)=> {
         verificationToken: hashedToken
     })
 
-    // TODO: send an email to user with token: rawToken
+    try{
+        await sendVerificationEmail(user.email, rawToken);
+    } catch(err){
+        throw ApiError.internal("Failed to send verification email") ;
+    }
 
     const userObj = user.toObject()
     delete userObj.password
@@ -39,7 +43,7 @@ const login = async ({email, password}) => {
     const isMatch = await user.comparePassword(password) ;
     if(!isMatch) throw ApiError.unauthorized("Invalid credentials");
 
-    if(!isVerified(user)) throw ApiError.unauthorized("User not verified");
+    // if(!isVerified(user)) throw ApiError.unauthorized("User not verified");
 
     const accessToken = generateAccessToken({id: user._id, role: user.role});
     const refreshToken = generateRefreshToken({id: user._id, role: user.role});
@@ -54,7 +58,6 @@ const login = async ({email, password}) => {
     cookie.sign(accessToken, {httpOnly: true, maxAge: 1000 * 60 * 60}) ;
     return { accessToken, refreshToken, user: userObj };
 }
-
 
 const refresh = async (token) => {
     if(!token) throw ApiError.unauthorized("Refresh token missing") ;
@@ -82,12 +85,13 @@ const logout = async (userid) => {
 
 const verifyUser = async (token) => {
     const hashToken = hashedtoken(token) ;
-    const user = await User.findOne({verificationToken: hashToken}) ;
+    const user = await User.findOne({verificationToken: hashToken}).select("+verificationToken") ;
     if(!user) throw ApiError.badRequest("Invalid token") ;
 
     user.isVerified = true ;
     user.verificationToken = undefined ;
     await user.save(validateBeforeSave=false) ;
+    return user ;
 }
 
 const forgotPassword = async (email) => {
