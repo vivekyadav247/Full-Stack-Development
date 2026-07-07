@@ -9,9 +9,11 @@ const router = Router()
 
 router.post("/register", validate(RegisterDto), controller.register)
 router.post("/login", validate(LoginDto), controller.login) ;
-router.get("/verify/:token", controller.verifyUser) ;
-router.get("/me", authenticate, controller.getMe) ;
-
+router.post("/refresh-token", controller.refreshToken) ;
 router.post("/logout", authenticate, controller.logout) ;
+router.post("/forgot-password", validate(ForgotPasswordDto), controller.forgotPassword) ;
+router.put("/reset-password", validate(ResetPasswordDto), controller.resetPassword) ;
+router.get("/verify-email/:token", controller.verifyUser) ;
+router.get("/me", authenticate, controller.getMe) ;
 
 export default router

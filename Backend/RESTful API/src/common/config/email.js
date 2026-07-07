@@ -33,4 +33,22 @@ const sendVerificationEmail = async (to, email, token) => {
     });
 }
 
-export { transporter, sendEmail, sendVerificationEmail };
+const sendResetPasswordEmail = async (to, email, token) => {
+    const subject = "Reset your password" ;
+    const html = `<p>Hi ${email},</p>
+    <p>Please click the link below to reset your password:</p>
+    <a href="${process.env.FRONTEND_URL}/reset-password?token=${token}">Reset Password</a>
+    <p>If you did not request this, please ignore this email.</p>` ;
+    await sendMail(email, subject, html);
+}
+
+const sendOrderConfirmationEmail = async (to, orderId) => {
+    const subject = "Order Confirmation" ;
+    const html = `<p>Hi,</p>
+    <p>Your order with ID ${orderId} has been confirmed.</p>
+    <p>Thank you for shopping with us!</p>` ;
+    await sendMail(to, subject, html);
+}
+
+const 
+export { transporter, sendEmail, sendVerificationEmail, sendResetPasswordEmail, sendOrderConfirmationEmail } ;
