@@ -4,6 +4,7 @@ import { db } from "../../db/index.js";
 import { usersTable } from "../../db/schema.js";
 import { eq } from "drizzle-orm" ;
 import { createHmac, randomBytes } from "node:crypto";
+import { createUserToken } from "./utils/token.js";
 
 class AuthenticationController {
     public async handleSignup(req: Request, res: Response){
@@ -53,8 +54,9 @@ class AuthenticationController {
         }
 
         // TODO: Generate JWT token and send it in response
+        const token = createUserToken({id: userSelect.id}) ;
 
-        return res.status(200).json({message: "Signin successful"}) ;
+        return res.status(200).json({message: "Signin successful", token}) ;
     }
 }
 
