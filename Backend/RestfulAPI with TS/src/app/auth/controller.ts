@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import {signupPayloadModel} from "./models.js";
+import {signupPayloadModel, signinPayloadModel} from "./models.js";
 import { db } from "../../db/index.js";
 import { usersTable } from "../../db/schema.js";
 import { eq } from "drizzle-orm" ;
@@ -31,6 +31,30 @@ class AuthenticationController {
         }).returning({id: usersTable.id}) ;
 
         return res.status(201).json({message: "User created successfully", data: {id:result?.id}}) ;
+    }
+
+    public async handleSingin(req: Request, res: Response){
+        const validationResult = await signinPayloadModel.safeParseAsync(req.body) ;
+
+        if(validationResult.error) return res.status(400).json({error: validationResult.error.issues}) ;
+
+        const {email, password} = validationResult.data ;
+
+        const [userSelect] = await db.select().from(usersTable).where(eq(usersTable.email, email)) ;
+        if(!userSelect) {
+            return res.status(400).json({error: "Invalid credentials"}) ;
+        }
+
+        const salt = userSelect.salt! ;
+        const hash = createHmac("sha256", salt).update(password).digest("hex") ;
+
+        if(hash !== userSelect.password) {
+            return res.status(400).json({error: "Invalid credentials"}) ;
+        }
+
+        // TODO: Generate JWT token and send it in response
+
+        return res.status(200).json({message: "Signin successful"}) ;
     }
 }
 
