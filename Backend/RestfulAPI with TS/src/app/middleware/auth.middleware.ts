@@ -11,7 +11,7 @@ export function authenticationMiddleware() {
         if(!authHeader) {
             next() ;
         }
-
+        
         if(!authHeader?.startsWith("Bearer ")) {
             return res.status(401).json({error: "Invalid authorization header"}) ;
         }
