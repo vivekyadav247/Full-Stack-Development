@@ -7,6 +7,7 @@ let sym : symbol = Symbol("key");
 
 // any type noImplecitAny is set to true in tsconfig.json, so we need to explicitly declare the type as any
 let naam : any ;
+// any type is a type that can hold any value, regardless of its type. It is used when we don't know the type of a variable at the time of writing code. We can assign any value to a variable of type any, and we can perform any operation on it without any type checking. However, using any type can lead to runtime errors and should be avoided whenever possible.
 
 
 
@@ -18,6 +19,7 @@ function render(document: unknown) {
         console.log(document);
     }
 }
+render("Hello World");
 
 
 
