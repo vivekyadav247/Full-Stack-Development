@@ -1,0 +1,31 @@
+-- CREATE TABLE students (
+--     student_id SERIAL PRIMARY KEY, --serial suto incremented integer , Primary Key is unique + never be NULL
+--     first_name VARCHAR(50) NOT NULL, --my first_name should have max 50 letters
+--     last_name VARCHAR(50),
+
+--     email VARCHAR(100) UNIQUE NOT NULL,
+--     phone_number VARCHAR(10) UNIQUE,
+--     country_code VARCHAR(3),
+
+--     age INT CHECK (age>12),
+
+--     current_status VARCHAR (28) DEFAULT 'active' CHECK (current_status IN ('active', 'graduated', 'dropped_out')),
+
+--     masterji_handle VARCHAR(50) UNIQUE,
+
+--     has_joined_masterji BOOLEAN DEFAULT FALSE,
+
+--     current_score INT DEFAULT 0 check (current_score > 0 AND current_score < 100),
+
+--     enrollment_date DATE DEFAULT CURRENT_DATE
+-- );
+
+ALTER TABLE students
+ADD COLUMN batch_name VARCHAR(50) DEFAULT 'Web Dev 2026';
+
+-- What is DDL ?
+-- DDL stands for Data Definition Language. It is a subset of SQL (Structured Query Language) that is used to define and manage database structures, such as tables, indexes, and schemas. DDL commands are used to create, modify, and delete database objects. Common DDL commands include:
+-- CREATE: Used to create new database objects like tables, indexes, or views.
+-- ALTER: Used to modify existing database objects, such as adding or dropping columns in a table.
+-- DROP: Used to delete database objects from the database.
+ 
