@@ -34,6 +34,10 @@ UPDATE canteen_menu
 SET price = price - 5;
 
 UPDATE canteen_menu
+SET is_available = TRUE, price = 75
+WHERE item_name = 'Paneer Tikka';
+
+UPDATE canteen_menu
 SET is_available = FALSE
 WHERE item_name = 'Samosa';
 
