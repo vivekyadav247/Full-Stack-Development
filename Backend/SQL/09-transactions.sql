@@ -1,0 +1,1 @@
+// Transactions in SQL are used to ensure that a series of operations are executed as a single unit of work. This means that either all operations within the transaction are completed successfully, or none of them are applied, maintaining the integrity of the database.
