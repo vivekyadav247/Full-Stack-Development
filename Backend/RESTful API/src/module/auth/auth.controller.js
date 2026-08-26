@@ -30,4 +30,21 @@ const verifyUser = async (req, res) => {
     ApiResponse.ok(res, "User verified successfully", user) ;
 }
 
-export {register, login, logout, getMe, verifyUser}
+const uploadAvatar = async (req, res) => {
+    try{
+        const file = req.file ;
+
+        if(!file){
+            return ApiResponse.badRequest(res, "No file uploaded") ;
+        }
+
+        const result = await authService.avatarUpload(req.user.id, file) ;
+
+        return ApiResponse.ok(res, "Avatar uploaded successfully", result.avatarUrl) ;
+
+    }catch(err){
+        ApiResponse.internalServerError(res, "Error uploading avatar") ;
+    }
+}
+
+export {register, login, logout, getMe, verifyUser, uploadAvatar}

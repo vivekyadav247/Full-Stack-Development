@@ -1,16 +1,20 @@
 import ApiError from "../../common/utils/api-error.js"
+import ApiResponses from "../../common/utils/api-responses.js"
 import { generateAccessToken, verifyAccessToken,generateRefreshToken,verifyRefreshToken,generateResetToken } from "../../common/utils/jwt.utils.js";
 import User from "./auth.model.js"
 
 import cookie from "cookie-parser"
 import crypto from "crypto"
 
+import fs from "node:fs" ;
+import imagekit from "../../common/config/imagekit.js" ;
+
 const hashedtoken = (token) => {crypto.createHash("sha256").update(token).digest("hex")};
 
 const register = async (req)=> {
     
     const existing = await User.findOne({email: req.email})
-    if(existing) throw ApiError.conflict("Email already exisits");
+    if(existing) throw ApiResponses.conflict(res,"Email already exisits");
 
     const {rawToken, hashedToken} = generateResetToken()
 
@@ -128,4 +132,36 @@ const getMe = async (userId) => {
     return userObj ;
 }
 
-export {register, login, refresh, logout, forgotPassword, newPassword, verifyUser, getMe} ;
+const avatarUpload = async (userId, file) => {
+    const user = await User.findById(userId) ;
+    if(!user) throw ApiError.notFound("User not found") ;
+
+    try{
+        const fileStream = fs.createReadStream(file.path);
+        const uploadResponse = await imagekit.upload({
+            file: fileStream,
+            fileName: file.filename,
+            folder: "/avatars"
+        })
+        const avatarUrl = uploadResponse.url;
+
+        await User.findByIdAndUpdate(userId, {avatar: avatarUrl}, {new: true}) ;
+
+        fs.unlinkSync(file.path) ; // Delete the file from local storage after successful upload
+
+        return {avatarUrl} ;
+
+    }catch(err){
+        try{
+            if(file.path && fs.existsSync(file.path)){
+                fs.unlinkSync(file.path) ; // Delete the file
+            }
+        } catch(err){
+            console.error("Error occurred while deleting the file:", err);
+        }
+        throw ApiError.internal("Failed to upload avatar") ;
+    }
+
+}
+
+export {register, login, refresh, logout, forgotPassword, newPassword, verifyUser, getMe, avatarUpload} ;
