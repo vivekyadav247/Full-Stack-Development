@@ -9,6 +9,7 @@ import authRouter from "./module/auth/auth.router.js" ;
 import ApiError from "./common/utils/api-error.js" ;
 import errorHandler from "./common/middleware/error.middleware.js" ;
 import ApiResponse from "./common/utils/api-responses.js" ;
+import * as multerFile from "./module/multer/practical-multer.js" ;
 
 import multer from "multer" ;
 
@@ -21,40 +22,67 @@ app.use(express.json()) ;
 app.use(express.urlencoded({extended: true})) ;
 app.use(cookieParser()) ;
 
+app.post("/upload", multerFile.uploadSingle, (req, res) => {
+    console.log(req.file) ;
+    ApiResponse.ok(res, req.file, "File Uploaded Successfully") ;
+}) ;
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, path.join(__dirname, '../public/uploads'))
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-//     const ext = path.extname(file.originalname) ;
-//     cb(null, file.fieldname + '-' + uniqueSuffix + ext)
-//   }
-// })
+app.post("/upload-disk", multerFile.uploadSingleDisk, (req, res) => {
+    console.log(req.file) ;
+    ApiResponse.ok(res, req.file, "File Uploaded Successfully") ;
+}) ;
 
-// // const storage = multer.memoryStorage() ;
+app.post("/upload-memory", multerFile.uploadSingleMemory, (req, res) => {
+    console.log(req.file.buffer) ;
+    saveFileToDisk(req.file.buffer, req.file.originalname) ;
+    ApiResponse.ok(res, "File Uploaded Successfully") ;
+}) ;
 
-// const upload = multer({
-//     storage,
-//     limits:{
-//         fileSize: 1024 * 1024 * 5 // 5mb
-//     },
-//     fileFilter: (req, file, cb) => {
-//         const allowed = ["image/jpeg", "image/png", "image/jpg"] ;
+app.post("/upload-multiple", multerFile.uploadMultiple, (req, res) => {
+    console.log(req.files) ;
+    ApiResponse.ok(res, req.files, "Files Uploaded Successfully") ;
+}) ;
 
-//         if(!allowed.includes(file.mimetype)){
-//             return cb(new ApiError(400, "Only .jpg, .jpeg and .png format allowed!"), false) ;
-//         }
-//     }
-// });
+app.post("/upload-multiple-disk", multerFile.uploadMultipleDisk, (req, res) => {
+    console.log(req.files) ;
+    ApiResponse.ok(res, req.files, "Files Uploaded Successfully") ;
+}) ;
 
-// app.post("/upload", upload.array("photos"), (req, res) => {
-//     console.log(req.files.buffer) ;
-//     ApiResponse.ok(res, req.files, "File Uploaded Successfully") ;
-// })
+app.post("/upload-multiple-memory", multerFile.uploadMultipleMemory, (req, res) => {
+    console.log(req.files) ;
+    req.files.forEach(file => {
+        saveFileToDisk(file.buffer, file.originalname) ;
+    }) ;
+    ApiResponse.ok(res, "Files Uploaded Successfully") ;
+}) ;
 
+app.post("/upload-multiple-fields", multerFile.uploadMutlipleFields, (req, res) => {
+    console.log(req.files) ;
+    ApiResponse.ok(res, req.files, "Files Uploaded Successfully") ;
+}) ;
 
+app.post("/upload-multiple-fields-disk", multerFile.uploadMutlipleFieldsDisk, (req, res) => {
+    console.log(req.files) ;
+    ApiResponse.ok(res, req.files, "Files Uploaded Successfully") ;
+}) ;
+
+app.post("/upload-multiple-fields-memory", multerFile.uploadMutlipleFieldsMemory, (req, res) => {
+    console.log(req.files) ;
+    req.files.file1.forEach(file => {
+        saveFileToDisk(file.buffer, file.originalname) ;
+    }
+    ) ;
+    req.files.file2.forEach(file => {
+        saveFileToDisk(file.buffer, file.originalname) ;
+    }
+    ) ;
+    ApiResponse.ok(res, "Files Uploaded Successfully") ;
+}) ;
+
+app.post("/upload-validation", multerFile.uploadSingleDiskValidated, (req, res) => {
+    console.log(req.file) ;
+    ApiResponse.ok(res, req.file, "File Uploaded Successfully") ;
+}) ;
 
 app.use("/api/auth", authRouter) ;
 
